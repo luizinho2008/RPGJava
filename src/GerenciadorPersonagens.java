@@ -2,91 +2,112 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class GerenciadorPersonagens {
-    HashMap <String, Personagem> personagens = new HashMap <String, Personagem>();
+    private final HashMap<String, Personagem> personagens = new HashMap<>();
+    private final Scanner scanner = new Scanner(System.in);
 
-    private Scanner sc = new Scanner(System.in);
+    public void criarPersonagem() throws Exception {
+        clearScreen();
+        System.out.println("======== Legends of Thalion ========\n\n");
+        System.out.println("Escolha a classe do personagem:");
+        System.out.println("1. Guerreiro\n2. Mago\n3. Arqueiro");
+        int classe = scanner.nextInt();
+        scanner.nextLine();  // Consumir a nova linha
 
-    public void criarPersonagem() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        Integer tipoPersonagem;
+        clearScreen();
+        System.out.println("======== Legends of Thalion ========\n\n");
+        System.out.println("Digite o nome do personagem:");
+        String nome = scanner.nextLine();
 
-        System.out.println("\nEscolha a classe do personagem: ");
-        System.out.println("\n1. Guerreiro");
-        System.out.println("2. Mago");
-        System.out.println("3. Arqueiro");
+        System.out.println("Digite os pontos de vida:");
+        int pontosVida = scanner.nextInt();
 
-        tipoPersonagem = sc.nextInt();
+        System.out.println("Digite os pontos de mana:");
+        int pontosMana = scanner.nextInt();
 
-        sc.nextLine();
+        System.out.println("Digite a força:");
+        int forca = scanner.nextInt();
 
-        System.out.print("Digite o nome do personagem: ");
-        String nome = sc.nextLine();
+        System.out.println("Digite a inteligência:");
+        int inteligencia = scanner.nextInt();
 
-        System.out.print("Digite os pontos de vida: ");
-        Integer pontosVida = sc.nextInt();
-
-        System.out.print("Digite os pontos de mana: ");
-        Integer pontosMana = sc.nextInt();
-
-        System.out.print("Digite a força: ");
-        Integer forca = sc.nextInt();
-
-        System.out.print("Digite a inteligência: ");
-        Integer inteligencia = sc.nextInt();
-
-
-        switch (tipoPersonagem) {
-            case 1:
-                Guerreiro personagem1 = new Guerreiro(nome, pontosVida, pontosMana, forca, inteligencia);
-
-                personagens.put(nome, personagem1);
-                
-                System.out.println("Personagem criado com sucesso!");
-                break;
-
-            case 2:
-                Mago personagem2 = new Mago(nome, pontosVida, pontosMana, forca, inteligencia);
-
-                personagens.put(nome, personagem2);
-                System.out.println("Personagem criado com sucesso!");
-                break;
-            case 3:
-                Arqueiro personagem3 = new Arqueiro(nome, pontosVida, pontosMana, forca, inteligencia);
-
-                personagens.put(nome, personagem3);
-                System.out.println("Personagem criado com sucesso!");
-                break;
-            default:
-                System.out.println("Tipo de personagem inexistente");
+        switch (classe) {
+            case 1 -> personagens.put(nome, new Guerreiro(nome, pontosVida, pontosMana, forca, inteligencia));
+            case 2 -> personagens.put(nome, new Mago(nome, pontosVida, pontosMana, forca, inteligencia));
+            case 3 -> personagens.put(nome, new Arqueiro(nome, pontosVida, pontosMana, forca, inteligencia));
+            default -> throw new Exception("Classe inválida!");
         }
+        clearScreen();
+        System.out.println("Personagem criado com sucesso!");
     }
 
     public void listarPersonagens() {
-        System.out.println("\nTodos os personagens:\n");
-        System.out.println(personagens);
-    }
-    public void adicionarItemAoPersonagem() {
-        sc.nextLine();
-        System.out.print("Nome do personagem: ");
-        String nomePersonagem = sc.nextLine();
-        Personagem personagem = personagens.get(nomePersonagem);
-
-        if(personagem == null) {
-            System.out.println("Personagem inexistente");
+        if (personagens.isEmpty()) {
+            System.out.println("Nenhum personagem criado.");
             return;
         }
-        else {
-            System.out.println("Escolha o item para adicionar: ");
-            System.out.println("1. ESPADA - Uma espada afiada, boa para ataques corpo a corpo");
-            System.out.println("2. ESCUDO - Um escudo resistente, aumenta a defesa");
-            System.out.println("3. POCAO - Uma poção mágica, restaura pontos de vida");
-            Integer itemAdd = sc.nextInt();
-            Item item = Item.values()[itemAdd - 1];
-            personagem.adicionarItem(item);
 
-            System.out.println("Item " + item + " adicionado ao personagem " + nomePersonagem);
+        for (Personagem personagem : personagens.values()) {
+            System.out.println("Nome: " + personagem.getNome() +
+                    ", Classe: " + personagem.getClass().getSimpleName() +
+                    ", Vida: " + personagem.getPontosVida() +
+                    ", Mana: " + personagem.getPontosMana() +
+                    ", Força: " + personagem.getForca() +
+                    ", Inteligência: " + personagem.getInteligencia());
+            personagem.listarItens();
+            System.out.println();
         }
-        
+    }
+
+    public void adicionarItemAoPersonagem() {
+        clearScreen();
+        System.out.println("======== Legends of Thalion ========\n\n");
+        scanner.nextLine();
+        System.out.println("Digite o nome do personagem:");
+        String nome = scanner.nextLine();
+
+        Personagem personagem = personagens.get(nome);
+        if (personagem == null) {
+            System.out.println("Personagem não encontrado.");
+            return;
+        }
+
+        System.out.println("\nEscolha o item para adicionar:");
+        for (Item item : Item.values()) {
+            System.out.println(item.ordinal() + 1 + ". " + item.name() + " - " + item.getDescricao());
+        }
+        int escolha = scanner.nextInt();
+        scanner.nextLine();
+
+        if (escolha < 1 || escolha > Item.values().length) {
+            System.out.println("Item inválido.");
+            return;
+        }
+        Item item = Item.values()[escolha - 1];
+        personagem.adicionarItem(item);
+    }
+
+    public void procurarPersonagem() {
+        clearScreen();
+        System.out.println("Buscar personagem:");
+        String nome = scanner.nextLine();
+
+        Personagem personagem = personagens.get(nome);
+        if (personagem == null) {
+            System.out.println("Personagem não cadastrado");
+        } else {
+            System.out.println("Nome: " + personagem.getNome() +
+                    ", Classe: " + personagem.getClass().getSimpleName() +
+                    ", Vida: " + personagem.getPontosVida() +
+                    ", Mana: " + personagem.getPontosMana() +
+                    ", Força: " + personagem.getForca() +
+                    ", Inteligência: " + personagem.getInteligencia());
+            personagem.listarItens();
+            System.out.println();
+        }
+    }
+
+    private void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

@@ -10,6 +10,6 @@ public enum Item {
     }
 
     public String getDescricao() {
-        return this.descricao;
+        return descricao;
     }
 }

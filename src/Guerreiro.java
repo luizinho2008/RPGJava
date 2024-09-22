@@ -1,17 +1,15 @@
 public class Guerreiro extends Personagem implements Habilidade {
-
-    public Guerreiro(String nome, Integer pontosVida, Integer pontosMana,
-    Integer forca, Integer inteligencia) {
+    public Guerreiro(String nome, int pontosVida, int pontosMana, int forca, int inteligencia) {
         super(nome, pontosVida, pontosMana, forca, inteligencia);
     }
 
     @Override
     public void atacar() {
-        System.out.println("O guerreiro está atacando");
+        System.out.println(getNome() + " realiza um ataque físico!");
     }
 
     @Override
     public void usarHabilidade() {
-        System.out.println("O guerreiro está usando a sua habilidade");
+        System.out.println(getNome() + " usa uma habilidade de Guerreiro!");
     }
 }

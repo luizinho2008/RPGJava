@@ -1,63 +1,79 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Personagem {
     private String nome;
-    private Integer pontosVida;
-    private Integer pontosMana;
-    private Integer forca;
-    private Integer inteligencia;
-    private ArrayList<Item> inventario = new ArrayList<Item>();
-    
-    public Personagem(String nome, Integer pontosVida, Integer pontosMana, Integer forca, Integer inteligencia) {
+    private int pontosVida;
+    private int pontosMana;
+    private int forca;
+    private int inteligencia;
+    private List<Item> inventario = new ArrayList<>();
+
+    public Personagem(String nome, int pontosVida, int pontosMana, int forca, int inteligencia) {
         this.nome = nome;
         this.pontosVida = pontosVida;
         this.pontosMana = pontosMana;
         this.forca = forca;
         this.inteligencia = inteligencia;
     }
+
     public String getNome() {
-        return this.nome;
+        return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public Integer getPontosVida() {
-        return this.pontosVida;
+    public int getPontosVida() {
+        return pontosVida;
     }
-    public void setPontosVida(Integer pontosVida) {
+
+    public void setPontosVida(int pontosVida) {
         this.pontosVida = pontosVida;
     }
 
-    public Integer getPontosMana() {
-        return this.pontosMana;
+    public int getPontosMana() {
+        return pontosMana;
     }
-    public void setPontosMana(Integer pontosMana) {
+
+    public void setPontosMana(int pontosMana) {
         this.pontosMana = pontosMana;
     }
 
-    public Integer getForca() {
-        return this.forca;
+    public int getForca() {
+        return forca;
     }
-    public void setForca(Integer forca) {
+
+    public void setForca(int forca) {
         this.forca = forca;
     }
 
-    public Integer getInteligencia() {
-        return this.inteligencia;
+    public int getInteligencia() {
+        return inteligencia;
     }
-    public void setInteligencia(Integer inteligencia) {
+
+    public void setInteligencia(int inteligencia) {
         this.inteligencia = inteligencia;
     }
 
     public void adicionarItem(Item item) {
         inventario.add(item);
-    };
-
-    @Override
-    public String toString() {
-        return "\nNome = " + nome + "\nPontos vida = " + pontosVida + "\nPontos mana = " + pontosMana + "\nForca="
-                + forca + "\nInteligencia = " + inteligencia + "\nInventario = " + inventario + "\n\n";
+        clearScreen();
+        System.out.println(item.name() + " adicionado ao inventário de " + nome);
     }
+
+    public void listarItens() {
+        System.out.println("Inventário de " + nome + ":");
+        for (Item item : inventario) {
+            System.out.println("[" + item.name() + " - " + item.getDescricao() + "]");
+        }
+    }
+
     public abstract void atacar();
+
+    private void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }
